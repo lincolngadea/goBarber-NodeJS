@@ -1,40 +1,32 @@
 import { Router } from 'express';
-import { uuid } from 'uuidv4';
-import {startOfHour, parseISO, isEqual} from 'date-fns';
+import { parseISO } from 'date-fns';
+
+import AppoitmensRepository from '../repositories/AppointmentsRepository';
+import CreateAppointmentService from '../services/CreateAppointmentService';
 
 const appointmentRouter = Router();
+const appointmentRepository = new AppoitmensRepository();
 
-interface Appointment{
-    id: string;
-    provider: string;
-    date: Date;
-}
+appointmentRouter.get('/',(request, response)=>{
+    const appointment = appointmentRepository.all();
 
-const appoitments: Appointment[] = [];
+    return response.json(appointment);
+});
 
-/** Exemplo do redirecionamento de roda criado no server ts apontando para o appointmentRouter */
 appointmentRouter.post('/',(request, response)=>{
-    const {provider, date} = request.body;
+    try{
+        const {provider, date} = request.body;
 
-    const parseDate = startOfHour(parseISO(date));
+        const parsedDate = parseISO(date);
 
-    const findAppointmentInSameDate = appoitments.find(appoitment=>isEqual(parseDate,appoitment.date));
+        const createAppointment = new CreateAppointmentService(appointmentRepository);
 
-    if(findAppointmentInSameDate){
-        return response
-            .status(400)
-            .json({message:"This appointment is already booked"});
-    }
+        const appointment = createAppointment.execute({provider,date:parsedDate});
 
-    const appoitment = {
-        id:uuid(),
-        provider,
-        date: parseDate,
-    }
-
-    appoitments.push(appoitment);
-
-    return response.json(appoitment);
-})
+        return response.json(appointment);
+        }catch(err){
+            return response.status(400).json({error: err.message});
+        }
+});
 
 export default appointmentRouter;
