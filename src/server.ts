@@ -5,8 +5,11 @@
  *
  * comando: yarn add @types/express
  */
+import 'reflect-metadata';
 import express from 'express';
 import routes from './routes';
+
+import './database'
 
 //Cria a aplicação para conexão com o server na porta especificada
 const app = express();

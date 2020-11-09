@@ -1,6 +1,7 @@
 // src/routes/index.ts
-import { Router } from 'express';
-import appointmentRouter from  './appointments.routes';
+import { Router } from 'express'; // Router é uma função dentro do express
+import appointmentsRouter from './appointments.routes';
+import usersRouter from './users.route';
 
 const routes = Router();
 
@@ -9,6 +10,7 @@ const routes = Router();
  * essa fota será direcionada para o appointments.routes.ts, onde poderá ser tratada
  * a partir de '/' como se fosse a raiz do projeto, poŕem iniciando a partir do appointments.
  */
-routes.use('/appointments', appointmentRouter);
+routes.use('/appointments', appointmentsRouter);
+routes.use('/users', usersRouter);
 
 export default routes;
