@@ -11,12 +11,17 @@ sessionsRouter.post('/', async (request, response) => {
 
         const authenticateUser = new AuthenticateUserService();
 
-        const { user } = await authenticateUser.execute({
+        const { user, token } = await authenticateUser.execute({
             email,
             password,
         });
 
-        return response.json({ ...user, password: undefined });
+        /**
+         * Retorna o Objeto user e dá um undefined no passwor
+         * para que não seja mostrado a senha no retorno
+         * Retorna tb o token
+         */
+        return response.json({ ...user, password: undefined, token });
     } catch (err) {
         return response.status(400).json({ error: err.message });
     }
