@@ -9,14 +9,14 @@ import 'reflect-metadata';
 import express from 'express';
 import routes from './routes';
 
-import './database'
+import './database';
 
-//Cria a aplicação para conexão com o server na porta especificada
+// Cria a aplicação para conexão com o server na porta especificada
 const app = express();
 
 app.use(express.json());
 app.use(routes);
 
-app.listen(3333,()=>{
+app.listen(3333, () => {
     console.log('🚀 Server Started on port 3333');
 });
